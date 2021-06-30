@@ -42,6 +42,7 @@ autoinstall:
         type: disk
         id: disk-0
         path: /dev/nvme0n1
+      # Primary partition - /dev/sda1
       - device: disk-0
         size: 536870912
         wipe: superblock
@@ -51,11 +52,13 @@ autoinstall:
         grub_device: true
         type: partition
         id: partition-0
-      - fstype: fat32
-        volume: partition-0
+      # Logical volume (bootable) for Primary partition
+      - volume: partition-0
+        fstype: fat32
         preserve: false
         type: format
         id: format-0
+      # Extended Partition - /dev/sda2
       - device: disk-0
         size: 249520193536
         wipe: superblock
@@ -64,8 +67,9 @@ autoinstall:
         preserve: false
         type: partition
         id: partition-1
-      - fstype: xfs
-        volume: partition-1
+      # Logical volume (not bootable) for Extended partition
+      - volume: partition-1
+        fstype: xfs
         preserve: false
         type: format
         id: format-1
@@ -79,6 +83,5 @@ autoinstall:
         id: mount-0
   version: 1
   late-commands:
+    # TODO Fix this to be a sudoers.d file instead, also, determine if this is necessary since the Ansible script does this
     - sed -i "s/%sudo\tALL=(ALL:ALL) ALL/%sudo\tALL=(ALL:ALL) NOPASSWD:ALL/g" /target/etc/sudoers
-    - curtin in-target --target /target systemctl disable ufw
-    - curtin in-target --target /target systemctl disable apparmor
