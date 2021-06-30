@@ -7,19 +7,19 @@ autoinstall:
       - arches:
           - amd64
           - i386
-        uri: 'http://us.archive.ubuntu.com/ubuntu'
+        uri: "http://us.archive.ubuntu.com/ubuntu"
       - arches:
           - default
-        uri: 'http://ports.ubuntu.com/ubuntu-ports'
+        uri: "http://ports.ubuntu.com/ubuntu-ports"
   identity:
     hostname: __HOSTNAME__
-    password: '__PASSWORD__'
+    password: "__PASSWORD__"
     realname: __USER_NAME__
     username: __USER_NAME__
   keyboard:
     layout: us
     toggle: null
-    variant: ''
+    variant: ""
   locale: en_US
   network:
     ethernets:
@@ -34,53 +34,82 @@ autoinstall:
     swap:
       size: 0
     config:
-      - ptable: gpt
+      # Primary Disk
+      - id: disk-0
+        type: disk
+        ptable: gpt
         wipe: superblock
         preserve: false
-        name: ''
+        name: "boot"
         grub_device: false
-        type: disk
-        id: disk-0
-        path: /dev/nvme0n1
-      # Primary partition - /dev/sda1
-      - device: disk-0
-        size: 536870912 # 536MB
+        path: /dev/main
+      #################################################
+      ######   Partitions    ##########################
+      #################################################
+      # Primary partition - /dev/mainp1 -> /boot/efi (see mount)
+      - type: partition
+        id: partition-0
+        device: disk-0
+        size: 500MB
         wipe: superblock
         flag: boot
         number: 1
         preserve: false
         grub_device: true
-        type: partition
-        id: partition-0
-      # Logical volume (bootable) for Primary partition
-      - volume: partition-0
-        fstype: fat32
-        preserve: false
-        type: format
-        id: format-0
-      # Extended Partition - /dev/sda2
-      - device: disk-0
-        size: 249520193536 # 250GB
+      # Extended Partition - /dev/mainp2 -> / (see mount)
+      - type: partition
+        id: partition-1
+        device: disk-0
+        size: 250GB
         wipe: superblock
-        flag: ''
+        flag: ""
         number: 2
         preserve: false
-        type: partition
-        id: partition-1
-      # Logical volume (not bootable) for Extended partition
-      - volume: partition-1
+      # Extended Partition - /dev/mainp3 -> /pv (see mount)
+      - type: partition
+        id: partition-2
+        device: disk-0
+        size: 100GB
+        wipe: superblock
+        flag: ""
+        number: 3
+        preserve: false
+      #################################################
+      ######   Formatting    ##########################
+      #################################################
+      # Format Partition-0 (/boot/efi)
+      - type: format
+        id: format-0
+        volume: partition-0
+        fstype: fat32
+        preserve: false
+      # Format Partition-1 (/)
+      - type: format
+        id: format-1
+        volume: partition-1
         fstype: xfs
         preserve: false
-        type: format
-        id: format-1
-      - device: format-1
-        path: /
-        type: mount
-        id: mount-1
-      - device: format-0
-        path: /boot/efi
-        type: mount
+      # Format Partition-2 (/pv)
+      - type: format
+        id: format-2
+        volume: partition-2
+        fstype: xfs
+        preserve: false
+      #################################################
+      ######   Mounting   #############################
+      #################################################
+      - type: mount
         id: mount-0
+        device: format-0
+        path: /boot/efi
+      - type: mount
+        id: mount-1
+        device: format-1
+        path: /
+      - type: mount
+        id: mount-2
+        device: format-2
+        path: /pv
   version: 1
   late-commands:
     # TODO Fix this to be a sudoers.d file instead, also, determine if this is necessary since the Ansible script does this
