@@ -42,11 +42,11 @@ autoinstall:
         preserve: false
         name: "boot"
         grub_device: false
-        path: /dev/main
+        path: /dev/nvme0n1
       #################################################
       ######   Partitions    ##########################
       #################################################
-      # Primary partition - /dev/mainp1 -> /boot/efi (see mount)
+      # Primary partition - /dev/nvme0n1p1 -> /boot/efi (see mount)
       - type: partition
         id: partition-0
         device: disk-0
@@ -56,7 +56,7 @@ autoinstall:
         number: 1
         preserve: false
         grub_device: true
-      # Extended Partition - /dev/mainp2 -> / (see mount)
+      # Extended Partition - /dev/nvme0n1p2 -> / (see mount)
       - type: partition
         id: partition-1
         device: disk-0
@@ -65,7 +65,7 @@ autoinstall:
         flag: ""
         number: 2
         preserve: false
-      # Extended Partition - /dev/mainp3 -> /pv (see mount)
+      # Extended Partition - /dev/nvme0n1p3 -> /pv (see mount)
       - type: partition
         id: partition-2
         device: disk-0
