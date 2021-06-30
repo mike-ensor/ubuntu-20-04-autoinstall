@@ -44,7 +44,7 @@ autoinstall:
         path: /dev/nvme0n1
       # Primary partition - /dev/sda1
       - device: disk-0
-        size: 536870912
+        size: 536870912 # 536MB
         wipe: superblock
         flag: boot
         number: 1
@@ -60,7 +60,7 @@ autoinstall:
         id: format-0
       # Extended Partition - /dev/sda2
       - device: disk-0
-        size: 249520193536
+        size: 249520193536 # 250GB
         wipe: superblock
         flag: ''
         number: 2
