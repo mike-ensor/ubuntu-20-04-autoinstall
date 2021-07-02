@@ -50,7 +50,7 @@ autoinstall:
       - type: partition
         id: partition-0
         device: disk-0
-        size: 80%
+        size: "500MB"
         wipe: superblock
         flag: boot
         number: 1
@@ -60,7 +60,7 @@ autoinstall:
       - type: partition
         id: partition-1
         device: disk-0
-        size: 250GB
+        size: "500GB"
         wipe: superblock
         flag: ""
         number: 2
@@ -69,7 +69,7 @@ autoinstall:
       - type: partition
         id: partition-2
         device: disk-0
-        size: 20%
+        size: "400GB"
         wipe: superblock
         flag: ""
         number: 3
