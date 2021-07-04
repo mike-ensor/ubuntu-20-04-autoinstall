@@ -6,6 +6,10 @@ UBUNTU_VERSION="20.04.2"
 UBUNTU_MIRROR="https://mirror.pit.teraswitch.com/ubuntu-releases"
 ISO_NAME="ubuntu-$UBUNTU_VERSION-live-server-amd64.iso"
 
+# Defaults for partitions
+GRUB_PARTITION="500MB"
+PRIMARY_PARTITION="500GB"
+AUX_PARTITION="400GB"
 
 function show_help() {
     echo ""
@@ -63,6 +67,10 @@ function build_iso() {
     sed -i "s|__USER_NAME__|$1|g" $REPO_DIR/user-data
     sed -i "s|__PASSWORD__|$2|g" $REPO_DIR/user-data
     sed -i "s|__HOSTNAME__|$3|g" $REPO_DIR/user-data
+    sed -i "s|__GRUB_PARTITION__|${GRUB_PARTITION}|g" $REPO_DIR/user-data
+    sed -i "s|__PRIMARY_PARTITION__|${PRIMARY_PARTITION}|g" $REPO_DIR/user-data
+    sed -i "s|__AUX_PARTITION__|${AUX_PARTITION}|g" $REPO_DIR/user-data
+
     xorriso -as mkisofs -r \
         -V Ubuntu\ custom\ amd64 \
         -o ubuntu-$UBUNTU_VERSION-live-server-amd64-autoinstall.iso \
@@ -95,7 +103,7 @@ function fetch_ssh_keys() {
     curl -Lo pub_keys https://github.com/$1.keys
 }
 
-OPTIND=1 
+OPTIND=1
 USER="ubuntu"
 PASSWORD='$6$mRQxrAB6Y3bwOdwZ$MPbMoqpw1RnbgnTb0yXq.K9aQEeBVdw1.i6WN5MLKRVkc0Fv.0bIYsd/HtdTgfEJosDcro1JZ2Xgo.tbIsorY/'
 USB_DEV=""

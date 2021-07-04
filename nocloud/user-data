@@ -50,7 +50,7 @@ autoinstall:
       - type: partition
         id: partition-0
         device: disk-0
-        size: "500MB"
+        size: "__GRUB_PARTITION__"
         wipe: superblock
         flag: boot
         number: 1
@@ -60,16 +60,16 @@ autoinstall:
       - type: partition
         id: partition-1
         device: disk-0
-        size: "500GB"
+        size: "__PRIMARY_PARTITION__"
         wipe: superblock
         flag: ""
         number: 2
         preserve: false
-      # Extended Partition - /dev/nvme0n1p3 -> /pv (see mount)
+      # Extended Partition - /dev/nvme0n1p3 -> /customer (see mount)
       - type: partition
         id: partition-2
         device: disk-0
-        size: "400GB"
+        size: "__AUX_PARTITION__"
         wipe: superblock
         flag: ""
         number: 3
