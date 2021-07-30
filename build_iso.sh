@@ -1,20 +1,13 @@
 #!/bin/bash
+
+# Include user-settings
+source ./settings.sh
+
 BASE_DIR='iso'
 SUB_DIR='nocloud'
 REPO_DIR="$BASE_DIR/$SUB_DIR"
-UBUNTU_VERSION="20.04.2"
 UBUNTU_MIRROR="https://mirror.pit.teraswitch.com/ubuntu-releases"
 ISO_NAME="ubuntu-$UBUNTU_VERSION-live-server-amd64.iso"
-
-# Defaults for partitions (bigger NUC)
-# GRUB_PARTITION="500MB"
-# PRIMARY_PARTITION="500GB"
-# AUX_PARTITION="400GB"
-
-# Smaller NUC (250GB total)
-GRUB_PARTITION="500MB"
-PRIMARY_PARTITION="130GB"
-AUX_PARTITION="100GB"
 
 function show_help() {
     echo ""
@@ -109,11 +102,11 @@ function fetch_ssh_keys() {
 }
 
 OPTIND=1
-USER="ubuntu"
+USER="abm-admin"
 PASSWORD='$6$ODnA9O5uWBDLMzRF$U0Pc7t2vljzCSya2kba/GV.Q1w2uOlitaqtcPZxTZ.d6/RTttjq9rWA9Rp/RlcXLVYSGeJ1..uSMe99mx2yZE/' #troubled-marble-150
 USB_DEV=""
 GIT_USER=""
-HOSTNAME="ubuntu-server"
+HOSTNAME="ubuntu-server" #Default
 
 while getopts "h?u:PF:K:H:" opt; do
     case "$opt" in
