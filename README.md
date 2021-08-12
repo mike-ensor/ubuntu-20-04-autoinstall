@@ -90,3 +90,12 @@ To add ssh keys to the iso simply create a file named `pub_keys` in the same dir
 You may have more than one SSH key in this file, just make sure each key is on its own line.
 
 If your SSH key is on GitHub you can use the `-K <myGitHubHandle>` command as well. This will over write the pub_keys file... Currently there is no merge functionallity. Create an issue if you would like to see this feature.
+
+
+## Reference
+
+### overall
+https://ubuntu.com/server/docs/install/autoinstall-reference
+
+### storage
+https://curtin.readthedocs.io/en/latest/topics/storage.html

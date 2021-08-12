@@ -68,6 +68,8 @@ function build_iso() {
     sed -i "s|__GRUB_PARTITION__|${GRUB_PARTITION}|g" $REPO_DIR/user-data
     sed -i "s|__PRIMARY_PARTITION__|${PRIMARY_PARTITION}|g" $REPO_DIR/user-data
     sed -i "s|__AUX_PARTITION__|${AUX_PARTITION}|g" $REPO_DIR/user-data
+    sed -i "s|__DISK_0_PATH__|${DISK_0_PATH}|g" $REPO_DIR/user-data
+    sed -i "s|__DISK_1_PATH__|${DISK_1_PATH}|g" $REPO_DIR/user-data
 
     xorriso -as mkisofs -r \
         -V Ubuntu\ custom\ amd64 \

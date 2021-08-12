@@ -22,8 +22,11 @@ autoinstall:
     variant: ""
   locale: en_US
   network:
+    # Ignores interfaces that don't match
     ethernets:
       eno1:
+        dhcp4: true
+      enp181s0f0:
         dhcp4: true
     version: 2
   ssh:
@@ -42,7 +45,16 @@ autoinstall:
         preserve: false
         name: "boot"
         grub_device: false
-        path: /dev/nvme0n1
+        path: __DISK_0_PATH__
+      ### TODO: UN-COMMENT THIS IF USING ATOS
+      - id: disk-1
+        type: disk
+        ptable: gpt
+        wipe: superblock
+        preserve: false
+        name: "second"
+        grub_device: false
+        path: __DISK_1_PATH__
       #################################################
       ######   Partitions    ##########################
       #################################################
@@ -53,7 +65,6 @@ autoinstall:
         size: "__GRUB_PARTITION__"
         wipe: superblock
         flag: boot
-        number: 1
         preserve: false
         grub_device: true
       # Extended Partition - /dev/nvme0n1p2 -> / (see mount)
@@ -63,17 +74,16 @@ autoinstall:
         size: "__PRIMARY_PARTITION__"
         wipe: superblock
         flag: ""
-        number: 2
         preserve: false
       # Extended Partition - /dev/nvme0n1p3 -> /customer (see mount)
       - type: partition
         id: partition-2
-        device: disk-0
+        device: disk-1
         size: "__AUX_PARTITION__"
         wipe: superblock
         flag: ""
-        number: 3
         preserve: false
+        grub_device: false
       #################################################
       ######   Formatting    ##########################
       #################################################
