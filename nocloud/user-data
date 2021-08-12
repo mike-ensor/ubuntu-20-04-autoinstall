@@ -1,5 +1,7 @@
 #cloud-config
 autoinstall:
+  version: 1
+  locale: en_US
   apt:
     geoip: true
     preserve_sources_list: false
@@ -11,6 +13,9 @@ autoinstall:
       - arches:
           - default
         uri: "http://ports.ubuntu.com/ubuntu-ports"
+  reporting:
+    builtin:
+      type: print # print to tty1 status output
   identity:
     hostname: __HOSTNAME__
     password: "__PASSWORD__"
@@ -20,7 +25,6 @@ autoinstall:
     layout: us
     toggle: null
     variant: ""
-  locale: en_US
   network:
     # Ignores interfaces that don't match
     ethernets:
@@ -120,7 +124,10 @@ autoinstall:
         id: mount-2
         device: format-2
         path: /customer
-  version: 1
+  error-commands:
+    - cat /var/log/installer
   late-commands:
     # TODO Fix this to be a sudoers.d file instead, also, determine if this is necessary since the Ansible script does this
     - sed -i "s/%sudo\tALL=(ALL:ALL) ALL/%sudo\tALL=(ALL:ALL) NOPASSWD:ALL/g" /target/etc/sudoers
+    - echo "Successful completion"
+    - sleep 3600s
