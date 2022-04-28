@@ -128,6 +128,7 @@ autoinstall:
     - cat /var/log/installer
   late-commands:
     # TODO Fix this to be a sudoers.d file instead, also, determine if this is necessary since the Ansible script does this
-    - sed -i "s/%sudo\tALL=(ALL:ALL) ALL/%sudo\tALL=(ALL:ALL) NOPASSWD:ALL/g" /target/etc/sudoers
+    # - sed -i "s/%sudo\tALL=(ALL:ALL) ALL/%sudo\tALL=(ALL:ALL) NOPASSWD:ALL/g" /target/etc/sudoers
+    - echo "%sudo\tALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/%sudo
     - echo "Successful completion"
     - sleep 3600s
